@@ -317,6 +317,10 @@ class ResourceItem extends React.Component {
                           <ReversibleField fieldName="providerCode" defaultValue={resource.providerCode} handleChangeField={handleChangeField}>
                             <input type="text" />
                           </ReversibleField>
+                          <p className="text-center font-weight-bold m-0">Primary</p>
+                          <ReversibleField fieldName="official" defaultValue={resource.official} handleChangeField={handleChangeField}>
+                            <input type="checkbox" className="form-check-input"/>
+                          </ReversibleField>
                         </>
                       </RoleConditional>
                     ) : (
