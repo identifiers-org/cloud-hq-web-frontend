@@ -57,14 +57,25 @@ export const getNamespacesFromRegistry = (params) => {
 // Get single namespace from registry. Will dispatch setNamespaces.
 export const getNamespaceFromRegistry = (prefix) => {
   return async (dispatch) => {
-    let requestUrl = new URL(`${config.registryApi}/restApi/namespaces/search/findByPrefix?prefix=${prefix}`);
-    let data;
+    let data, response;
 
+    let requestUrl = new URL(`${config.registryApi}/restApi/namespaces/search/findByPrefix?prefix=${prefix}`);
     try {
-      const response = await fetch(requestUrl);
+      response = await fetch(requestUrl);
       data = await response.json();
     } catch (err) {
       console.error('Error fetching namespace', err);
+    }
+
+    let statisticsUrl = new URL(`${config.registryApi}/statistics/namespace/${prefix}`);
+    try {
+      response = await fetch(statisticsUrl);
+      if (response.ok) {
+        const stats = await response.json();
+        data['stats'] = stats.payload
+      }
+    } catch (err) {
+      console.error("Error fetching namespace statistics", err)
     }
 
     dispatch(setNamespaceList([data]));

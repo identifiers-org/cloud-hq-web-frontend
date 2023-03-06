@@ -431,7 +431,6 @@ class NamespaceDetailsPage extends React.Component {
 
         <div className="row">
           <div className="col">
-            {/* TODO: Change to FINGERPRINT when EBI adds it to EBI-Font-icons */}
             <h2><i className="icon icon-common icon-barcode" /> Identification schemes</h2>
           </div>
         </div>
@@ -481,6 +480,32 @@ class NamespaceDetailsPage extends React.Component {
             </table>
           </div>
         </div>
+
+        {/* Page first loads without statistics */}
+        { namespace.stats ? <>
+          <div className="row">
+            <div className="col">
+              <h2><i className="icon icon-common icon-search-document" /> Usage for last month </h2>
+            </div>
+          </div>
+
+          <div className="row mb-3">
+            <div className="col overflow-y-scroll">
+              <table className="table table-sm table-striped table-borderless">
+                <tbody>
+                  <tr>
+                    <td className="w-35">Number of visits</td>
+                    <td> {namespace.stats.nb_visits} </td>
+                  </tr>
+                  <tr>
+                    <td className="w-35">Number of unique visitors</td>
+                    <td> {namespace.stats.nb_uniq_visitors} </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </> : '' }
 
         <div className="row">
           <div className="col">
