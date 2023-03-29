@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 // Components.
 import Search from '../HomePage/Search';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { useMatomo } from '@jonkoops/matomo-tracker-react';
 
 // Utils.
 import { isIpadScreen, isSmallScreen } from '../../utils/responsive';

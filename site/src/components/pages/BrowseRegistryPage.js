@@ -5,7 +5,7 @@ import { faDatabase } from '@fortawesome/free-solid-svg-icons';
 import NamespaceList from '../BrowseRegistryPage/NamespaceList';
 import PageTitle from '../common/PageTitle';
 
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { useMatomo } from '@jonkoops/matomo-tracker-react';
 
 class BrowseRegistryPage extends React.Component {
   constructor (props) {

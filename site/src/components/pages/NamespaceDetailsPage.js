@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import { useParams } from 'react-router-dom'
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { useMatomo } from '@jonkoops/matomo-tracker-react';
 
 // Actions.
 import { getNamespaceFromRegistry, getResourcesFromRegistry, getStatisticsFromRegistry} from '../../actions/NamespaceList';

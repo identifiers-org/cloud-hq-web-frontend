@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { useMatomo } from '@jonkoops/matomo-tracker-react';
 
 // Actions.
 import { getPrefixRegistrationSessionFromRegistry } from '../../actions/CurationDashboardPage/PrefixRegistrationSession';

@@ -6,7 +6,7 @@ import PageTitle from '../common/PageTitle';
 import PrefixRegistrationSessionList from '../CurationDashboardPage/PrefixRegistrationSessionList';
 import ResourceRegistrationSessionList from '../CurationDashboardPage/ResourceRegistrationSessionList';
 
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { useMatomo } from '@jonkoops/matomo-tracker-react';
 
 const CurationDashboardPage = () => {
   const { trackPageView } = useMatomo();

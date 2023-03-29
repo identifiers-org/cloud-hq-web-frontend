@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { useMatomo } from '@datapunt/matomo-tracker-react';
+import { useMatomo } from '@jonkoops/matomo-tracker-react';
 
 // Actions.
 import {
@@ -16,7 +16,7 @@ import { getInstitutionFromRegistry } from '../../actions/InstitutionList';
 
 // Components.
 import PageTitle from '../common/PageTitle';
-import RequestField from '../common/RegistrationRequestField';
+import RequestField from '../RegistrationPages/RegistrationRequestField';
 import RORIDInput from '../common/RORIDInput';
 
 // Config.

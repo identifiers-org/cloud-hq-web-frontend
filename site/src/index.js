@@ -23,7 +23,7 @@ import { appendSchemaOrg } from './utils/schemaOrg';
 import './styles/styles.scss';
 import { renewToken } from './utils/auth';
 
-import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react';
+import { MatomoProvider, createInstance } from '@jonkoops/matomo-tracker-react';
 
 
 // ==================== APP Initialization ====================
