@@ -38,7 +38,7 @@ class ResourceRegistrationSessionItem extends React.Component {
                   <p className="m-0">
                     {expanded ? <i className="icon icon-common icon-minus mr-2" /> : <i className="icon icon-common icon-plus mr-2" />}
                     <strong>Requested Resource: </strong>
-                    {resourceRegistrationRequest.providerCode}
+                    Provider <strong>{resourceRegistrationRequest.providerCode}</strong> for namespace <strong>{resourceRegistrationRequest.namespacePrefix}</strong>
                   </p>
                   <p className="m-0 pl-2 text-small text-muted">
                     <small>
