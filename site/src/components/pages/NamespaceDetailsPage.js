@@ -423,23 +423,23 @@ class NamespaceDetailsPage extends React.Component {
                     )}
                   </td>
                 </tr>
-                <tr>
-                  <td>Prefix embedded in LUI</td>
-                  <td>
-                    {editNamespace ? (
-                        <RoleConditional
-                            requiredRoles={['editNamespace']}
-                            fallbackComponent={namespace.namespaceEmbeddedInLui}
-                        >
-                          <ReversibleField fieldName="namespaceEmbeddedInLui" defaultValue={namespace.namespaceEmbeddedInLui} handleChangeField={handleChangeField}>
-                            <input type="checkbox" className="form-check-input"/>
-                          </ReversibleField>
-                        </RoleConditional>
-                    ) : (
-                        namespace.pattern
-                    )}
-                  </td>
-                </tr>
+                <RoleConditional
+                  requiredRoles={['editNamespace']}
+                  fallbackComponent={namespace.namespaceEmbeddedInLui}
+                >
+                  <tr>
+                    <td>Prefix embedded in LUI</td>
+                    <td>
+                      {editNamespace ? (
+                        <ReversibleField fieldName="namespaceEmbeddedInLui" defaultValue={namespace.namespaceEmbeddedInLui} handleChangeField={handleChangeField}>
+                          <input type="checkbox" className="form-check-input"/>
+                        </ReversibleField>
+                      ) : (
+                        String(namespace.namespaceEmbeddedInLui)
+                      )}
+                    </td>
+                  </tr>
+                </RoleConditional>
                 <tr>
                   <td>Legacy registry identifier</td>
                   <td>{namespace.mirId}</td>
