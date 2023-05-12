@@ -14,6 +14,7 @@ import {clearSavedFormData} from "../RequestPages/LocalStorageFormikButtons";
 
 
 const onSubmit = async (values) => {
+  // console.log(values)
   await submitPrefixRequest(values)
     .then(response =>
       response.json().then(json => {

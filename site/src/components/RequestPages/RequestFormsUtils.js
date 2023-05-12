@@ -6,6 +6,11 @@ import getInstitutionForRORIDFromRegistry from "../../utils/getInstitutionRorIdF
 import {swalError} from "../../utils/swalDialogs";
 import {getNamespacesFromRegistry} from "../../actions/NamespaceList";
 
+
+
+
+
+
 export const handleInstitutionIsProviderChange = (values, setValues, setInstitutionIsProvider) =>
   (event) => {
     const source = event.target.checked ? values : PrefixRequestInitialValues;
@@ -18,6 +23,11 @@ export const handleInstitutionIsProviderChange = (values, setValues, setInstitut
     }, true);
     setInstitutionIsProvider(event.target.checked);
   }
+
+
+
+
+
 
 export const handleRorAutocomplete = (handleChange, errors, values, setValues, touched, setTouched) =>
   (event) => {
@@ -46,14 +56,27 @@ export const handleRorAutocomplete = (handleChange, errors, values, setValues, t
     }
   }
 
-const BasePrefixAutoCompleter = (props) => {
+
+
+
+
+
+const DisconnectedPrefixAutoCompleter = (props) => {
   const [ selected, setSelected ] = useState(false);
   const [ focused, setFocused ] = useState(false)
+  const [ debouncer, setDebouncer ] = useState(0)
 
   const onWatchedChanged = () => {
-    const watched = document.getElementById(props.watchedId);
-    setSelected(false)
-    props.getNamespacesFromRegistry({content: watched.value});
+    clearTimeout(debouncer)
+    setDebouncer(
+      setTimeout(
+      () => {
+        const watched = document.getElementById(props.watchedId);
+        setSelected(false)
+        if (watched.value)
+          props.getNamespacesFromRegistry({content: watched.value});
+      }, 75)
+    )
   }
 
   const onClick = (event) => {
@@ -63,20 +86,18 @@ const BasePrefixAutoCompleter = (props) => {
 
   const onSuggestionMouseOver = (e) =>
     e.target.classList.add("suggestion__selected", "text-white")
-
   const onSuggestionMouseOut = (e) =>
     e.target.classList.remove("suggestion__selected", "text-white")
 
+
   const onFocus = () =>
     setFocused(true);
-
-  const onLoseFocus = () =>
-    setTimeout(() => setFocused(false), 500);
-  //Delay to make sure element stays on screen for click
+  const onLoseFocus = () => //Delay to make sure element stays on screen long enough for click
+    setTimeout(() => setFocused(false), 100);
 
   useEffect(() => {
     const watched = document.getElementById(props.watchedId);
-    if (watched.value) new Promise(() => onWatchedChanged());
+    // if (watched.value) new Promise(() => onWatchedChanged());
     watched.addEventListener('input', onWatchedChanged);
     watched.addEventListener('focus', onFocus);
     watched.addEventListener('blur', onLoseFocus);
@@ -120,5 +141,5 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getNamespacesFromRegistry: (params) => dispatch(getNamespacesFromRegistry(params))
 });
-export const PrefixAutoCompleter = connect(mapStateToProps, mapDispatchToProps)(BasePrefixAutoCompleter)
+export const PrefixAutoCompleter = connect(mapStateToProps, mapDispatchToProps)(DisconnectedPrefixAutoCompleter)
 

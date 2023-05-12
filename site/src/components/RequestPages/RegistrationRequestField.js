@@ -1,5 +1,5 @@
 import React from 'react';
-import {FastField} from 'formik';
+import {Field} from 'formik';
 
 const RegistrationRequestField = (props) => {
   const id = `form-control-${props.id}`;
@@ -23,53 +23,60 @@ const RegistrationRequestField = (props) => {
       <div className="col-sm-12 col-md-10 col-lg-9">
         {(() => {
           switch (props.type) {
-          case "text":
-            case "password": return (
-            <FastField
-              as="input"
-              id={props.id}
-              name={props.id}
-              type={props.type}
-              className={"form-control " + validityClass}
-              aria-describedby={`${id}-helpblock`}
-              disabled={props.disabled}
-              placeholder={props.placeholder}
-            />
-          )
-          case "textarea": return (
-            <FastField
-              as="textarea"
-              id={props.id}
-              name={props.id}
-              className={"form-control textarea " + validityClass}
-              aria-describedby={`${id}-helpblock`}
-              disabled={props.disabled}
-              placeholder={props.placeholder}
-              rows={props.rows}
-            />
-          )
-          case "select": return (
-            <FastField
-              as="select"
-              id={props.id}
-              name={props.id}
-              className={"form-control " + validityClass}
-              aria-describedby={`${id}-helpblock`}
-              disabled={props.disabled}
-            >
-              <option value="" disabled>{props.placeholder || 'Select...'}</option>
-              {
-                props.options.map(option => (
-                  <option
-                    value={option.shortId}
-                    key={`option-${option.shortId}`}
-                  >
-                    {option.label}
-                  </option>
-                ))
-              }
-            </FastField>
-          )}
+            case "text":
+            case "password":
+            case "checkbox":
+              return (
+                <Field
+                  as="input"
+                  id={props.id}
+                  name={props.id}
+                  type={props.type}
+                  className={`form-control ${validityClass}`}
+                  style={props.type === "checkbox" ? {width: "initial"} : {}}
+                  aria-describedby={`${id}-helpblock`}
+                  disabled={props.disabled}
+                  placeholder={props.placeholder}
+                />
+              )
+            case "textarea":
+              return (
+                <Field
+                  as="textarea"
+                  id={props.id}
+                  name={props.id}
+                  className={"form-control textarea " + validityClass}
+                  aria-describedby={`${id}-helpblock`}
+                  disabled={props.disabled}
+                  placeholder={props.placeholder}
+                  rows={props.rows}
+                />
+              )
+            case "select":
+              return (
+                <Field
+                  as="select"
+                  id={props.id}
+                  name={props.id}
+                  type={props.type}
+                  className={"form-control " + validityClass}
+                  aria-describedby={`${id}-helpblock`}
+                  disabled={props.disabled}
+                >
+                  <option value="" disabled>{props.placeholder || 'Select...'}</option>
+                  {
+                    props.options.map(option => (
+                      <option
+                        value={option.shortId}
+                        key={`option-${option.shortId}`}
+                      >
+                        {option.label}
+                      </option>
+                    ))
+                  }
+                </Field>
+              )
+          }
         })()}
         { props.autocompleter && PreparedAutocompleter }
         <div className={(props.touched[props.id] && props.errors[props.id]) ? 'd-block text-danger' : 'd-none'}>

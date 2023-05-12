@@ -435,7 +435,7 @@ class NamespaceDetailsPage extends React.Component {
                           <input type="checkbox" className="form-check-input"/>
                         </ReversibleField>
                       ) : (
-                        String(namespace.namespaceEmbeddedInLui)
+                        namespace.namespaceEmbeddedInLui.toString()
                       )}
                     </td>
                   </tr>

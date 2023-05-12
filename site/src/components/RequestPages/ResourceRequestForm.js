@@ -268,6 +268,39 @@ const ResourceRequestForm = (props) => {
             errors={errors}
             touched={touched}
           />
+
+          <RegistrationRequestField
+            id="protectedUrls"
+            description="Do links require users to authenticate to access information?"
+            label="Are links protected?"
+            type="checkbox"
+            errors={errors}
+            touched={touched}
+          />
+
+          {values.protectedUrls && <>
+            <RegistrationRequestField
+              id="authHelpDescription"
+              description="A short text describing the need for authentication and how to authenticate.
+                           This should be a little paragraph to give some information to users.
+                           The URL bellow should be where users find further details."
+              label="Authentication description"
+              type="textarea"
+              disabled={!values.protectedUrls}
+              errors={errors}
+              touched={touched}
+            />
+
+            <RegistrationRequestField
+              id="authHelpUrl"
+              description="URL for users to get details on how to authenticate to access resource"
+              label="Authentication details URL"
+              type="text"
+              disabled={!values.protectedUrls}
+              errors={errors}
+              touched={touched}
+            />
+          </>}
         </div>
       </div>
 

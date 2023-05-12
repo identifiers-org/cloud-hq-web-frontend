@@ -155,6 +155,16 @@ const validators = {
     return validateThroughAPI(url, {requester: {name: requesterName}});
   },
 
+  authHelpUrl: async (requesterName, registrationRequest, registrationRequestType) => {
+    const url = `${config.registryApi}/${validationEndpoint[registrationRequestType]}/validateAuthHelpUrl`;
+    return validateThroughAPI(url, {requester: {name: requesterName}});
+  },
+
+  authHelpDescription: async (requesterName, registrationRequest, registrationRequestType) => {
+    const url = `${config.registryApi}/${validationEndpoint[registrationRequestType]}/validateAuthHelpDescription`;
+    return validateThroughAPI(url, {requester: {name: requesterName}});
+  },
+
   requesterEmail: async (requesterEmail, registrationRequest, registrationRequestType) => {
     const url = `${config.registryApi}/${validationEndpoint[registrationRequestType]}/validateRequesterEmail`;
     return validateThroughAPI(url, {requester: {email: requesterEmail}});
