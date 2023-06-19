@@ -63,6 +63,12 @@ export const getNamespaceFromRegistry = (prefix) => {
     try {
       response = await fetch(requestUrl);
       data = await response.json();
+      if (data.deprecated) {
+        const succResponse = await fetch(data["_links"]["successor"]["href"])
+        if (succResponse.ok) {
+          data["successor"] = await succResponse.json()
+        }
+      }
     } catch (err) {
       console.error('Error fetching namespace', err);
     }
@@ -74,11 +80,11 @@ export const getNamespaceFromRegistry = (prefix) => {
 
 export const getStatisticsFromRegistry = (namespace) => {
   return async (dispatch) => {
-    let stats = {};
+    let stats = null;
     const statisticsUrl = new URL(`${config.registryApi}/statistics/namespace/${namespace.prefix}`);
     try {
       const response = await fetch(statisticsUrl);
-      if (response.ok) {
+      if (response.status === 200) {
         stats = await response.json();
         stats = stats.payload;
       }

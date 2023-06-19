@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import { useParams } from 'react-router-dom'
 import { useMatomo } from '@jonkoops/matomo-tracker-react';
 
@@ -28,6 +27,7 @@ import { config } from '../../config/Config';
 import { swalConfirmation, failureToast, successToast, infoToast } from '../../utils/swalDialogs';
 import validators from '../../utils/validators';
 import Spinner from "../common/Spinner";
+import DeprecationBanner from "../NamespaceDetailsPage/DeprecationBanner";
 
 
 class NamespaceDetailsPage extends React.Component {
@@ -280,21 +280,7 @@ class NamespaceDetailsPage extends React.Component {
           extraTitle={namespace.name}
         />
 
-        {namespace.deprecated && (
-          <div className="row justify-content-md-center p-3 mb-3">
-            <div className="col col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-8 bg-danger p-2">
-              <h3 className="text-center text-white mb-2">
-                <i className="icon icon-common icon-trash mr-3" />
-                This namespace is <strong>deactivated</strong>
-              </h3>
-              <p className="mb-0 text-white">
-                The service has been marked as deactivated since {moment(namespace.deprecationDate).format('ll')}. This
-                means either the institution abandoned it, or no providers are available for it. You can try looking in
-                the institution's web below for more information.
-              </p>
-            </div>
-          </div>
-        )}
+        {namespace.deprecated && <DeprecationBanner namespace={namespace}/>}
 
         {editNamespace ? (
           <div className="row mb-1">
@@ -507,24 +493,25 @@ class NamespaceDetailsPage extends React.Component {
             <h2><i className="icon icon-common icon-search-document" /> Usage for last month </h2>
           </div>
         </div>
-        { (namespace.stats === undefined) ? <Spinner noText noCenter /> : <>
-            <div className="row mb-3">
-            <div className="col overflow-y-scroll">
-              <table className="table table-sm table-striped table-borderless">
-                <tbody>
-                  <tr>
-                    <td className="w-35">Number of visits</td>
-                    <td> {namespace.stats.nb_visits} </td>
-                  </tr>
-                  <tr>
-                    <td className="w-35">Number of unique visitors</td>
-                    <td> {namespace.stats.nb_uniq_visitors} </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </>}
+        { (namespace.stats === undefined) ? <Spinner noText noCenter /> :
+            (namespace.stats === null ?  <div className="row mb-3"> Statistics deactivated </div> : <>
+              <div className="row mb-3">
+                <div className="col overflow-y-scroll">
+                  <table className="table table-sm table-striped table-borderless">
+                    <tbody>
+                      <tr>
+                        <td className="w-35">Number of visits</td>
+                        <td> {namespace.stats.nb_visits} </td>
+                      </tr>
+                      <tr>
+                        <td className="w-35">Number of unique visitors</td>
+                        <td> {namespace.stats.nb_uniq_visitors} </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+        </>) }
 
         <div className="row">
           <div className="col">
