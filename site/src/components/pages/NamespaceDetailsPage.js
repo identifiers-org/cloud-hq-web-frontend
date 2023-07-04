@@ -423,23 +423,23 @@ class NamespaceDetailsPage extends React.Component {
                     )}
                   </td>
                 </tr>
-                <RoleConditional
-                  requiredRoles={['editNamespace']}
-                  fallbackComponent={namespace.namespaceEmbeddedInLui}
-                >
-                  <tr>
-                    <td>Prefix embedded in LUI</td>
-                    <td>
-                      {editNamespace ? (
+                <tr>
+                  <td>Prefix embedded in LUI</td>
+                  <td>
+                    {editNamespace ? (
+                      <RoleConditional
+                        requiredRoles={['editNamespace']}
+                        fallbackComponent={namespace.namespaceEmbeddedInLui}
+                      >
                         <ReversibleField fieldName="namespaceEmbeddedInLui" defaultValue={namespace.namespaceEmbeddedInLui} handleChangeField={handleChangeField}>
                           <input type="checkbox" className="form-check-input"/>
                         </ReversibleField>
-                      ) : (
-                        namespace.namespaceEmbeddedInLui.toString()
-                      )}
-                    </td>
-                  </tr>
-                </RoleConditional>
+                      </RoleConditional>
+                    ) : (
+                      namespace.namespaceEmbeddedInLui ? "Yes" : "No"
+                    )}
+                  </td>
+                </tr>
                 <tr>
                   <td>Legacy registry identifier</td>
                   <td>{namespace.mirId}</td>
@@ -469,7 +469,7 @@ class NamespaceDetailsPage extends React.Component {
                 </tr>
                 <tr>
                   <td>Registry URI</td>
-                  <td>{config.baseUrl}registry/{namespace.prefix}</td>
+                  <td><a href={config.baseUrl + "registry/" + namespace.prefix} target="_blank">{config.baseUrl}registry/{namespace.prefix}</a></td>
                 </tr>
                 <tr>
                   <td>Sample URL</td>

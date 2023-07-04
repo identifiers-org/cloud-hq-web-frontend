@@ -391,7 +391,7 @@ class ResourceItem extends React.Component {
                         </ReversibleField>
                       </RoleConditional>
                     ) : (
-                      resource.resourceHomeUrl
+                      <a target='_blank' href={resource.resourceHomeUrl}>{resource.resourceHomeUrl}</a>
                     )}
                   </td>
                 </tr>
@@ -426,7 +426,7 @@ class ResourceItem extends React.Component {
                           </ReversibleField>
                         </RoleConditional>
                       ) : (
-                        resource.authHelpUrl
+                        <a href={resource.authHelpUrl} target='_blank'>{resource.authHelpUrl}</a>
                       )}
                     </td>
                   </tr>
