@@ -23,12 +23,14 @@ import { appendSchemaOrg } from './utils/schemaOrg';
 import './styles/styles.scss';
 import { renewToken } from './utils/auth';
 
-import { MatomoProvider, createInstance } from '@jonkoops/matomo-tracker-react';
+import { MatomoProvider, createInstance as createMatomoInstance } from '@jonkoops/matomo-tracker-react';
 
+import "@popperjs/core"
+import "bootstrap/dist/js/bootstrap.min"
 
 // ==================== APP Initialization ====================
 (async () => {
-  const instance = createInstance({
+  const instance = createMatomoInstance({
     urlBase: 'https://matomo.identifiers.org/',
     siteId: 1,
     disabled: false, // optional, false by default. Makes all tracking calls no-ops if set to true.

@@ -63,10 +63,11 @@ export const getNamespaceFromRegistry = (prefix) => {
     try {
       response = await fetch(requestUrl);
       data = await response.json();
-      if (data.deprecated) {
+      if (data.deprecated && data["_links"]["successor"] !== undefined) {
         const succResponse = await fetch(data["_links"]["successor"]["href"])
         if (succResponse.ok) {
-          data["successor"] = await succResponse.json()
+          const successor = await succResponse.json()
+          data["successor"] = successor.prefix
         }
       }
     } catch (err) {

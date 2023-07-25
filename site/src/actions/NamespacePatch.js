@@ -36,9 +36,16 @@ export const setNamespacePatch = (id, namespace) => {
 // Patch a namespace.
 export const patchNamespace = (id, newNamespace) => {
   return async () => {
-    const requestUrl = `${config.registryApi}/restApi/namespaces/${id}`;
-    const authToken = await renewToken();
-    const init = {
+    let requestUrl = `${config.registryApi}/restApi/namespaces/${id}`;
+    let authToken = await renewToken();
+
+    let successor = undefined;
+    if ("successor" in newNamespace) {
+      successor = newNamespace.successor;
+      delete newNamespace.successor;
+    }
+
+    let init = {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json',
@@ -47,7 +54,47 @@ export const patchNamespace = (id, newNamespace) => {
       body: JSON.stringify(newNamespace)
     };
 
-    return await fetch(requestUrl, init);
+    let response = await fetch(requestUrl, init);
+    if (!response.ok) {
+      console.error("Failed namespace patch")
+      return response;
+    }
+    console.error("Not failed namespace patch")
+
+    if (successor !== undefined) {
+      requestUrl = `${config.registryApi}/restApi/namespaces/search/findByPrefix?prefix=${successor}`;
+      authToken = await renewToken();
+
+      let init = {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        }
+      };
+      response = await fetch(requestUrl, init);
+      if (!response.ok) {
+        console.error("Failed namespace GET by prefix")
+        return response;
+      }
+      console.error("Not failed namespace GET by prefix")
+
+      const jsonResponse = await response.json();
+      successor = jsonResponse["_links"].self.href;
+
+      requestUrl = `${config.registryApi}/restApi/namespaces/${id}/successor`;
+      authToken = await renewToken();
+
+      init = {
+        method: 'PUT',
+        headers: {
+          'content-type': 'text/uri-list',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: successor
+      };
+      return await fetch(requestUrl, init);
+    }
   };
 };
 
@@ -56,6 +103,7 @@ export const patchNamespace = (id, newNamespace) => {
 export const deactivateNamespace = (id) => {
   return async () => {
     const requestUrl = `${config.registryApi}/${config.namespaceManagementEndpoint}/deactivateNamespace/${id}`;
+
     const authToken = await renewToken();
     const init = {
       method: 'GET',

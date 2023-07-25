@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import { useMatomo } from '@jonkoops/matomo-tracker-react';
@@ -19,6 +19,7 @@ import PageTitle from '../common/PageTitle';
 import ResourceItem from '../NamespaceDetailsPage/ResourceItem';
 import ReversibleField from '../common/ReversibleField';
 import RoleConditional from '../common/RoleConditional';
+import NamespaceDeprecationNotice from "../NamespaceDetailsPage/NamespaceDeprecationNotice";
 
 // Config.
 import { config } from '../../config/Config';
@@ -27,8 +28,6 @@ import { config } from '../../config/Config';
 import { swalConfirmation, failureToast, successToast, infoToast } from '../../utils/swalDialogs';
 import validators from '../../utils/validators';
 import Spinner from "../common/Spinner";
-import DeprecationBanner from "../NamespaceDetailsPage/DeprecationBanner";
-
 
 class NamespaceDetailsPage extends React.Component {
   constructor (props) {
@@ -40,7 +39,8 @@ class NamespaceDetailsPage extends React.Component {
       editNamespace: params.get('editNamespace') === 'true' || false,
       namespaceId: undefined,
       namespaceFieldsChanged: new Set(),
-      newNamespace: this.props.newNamespace
+      newNamespace: this.props.newNamespace,
+      modalVisible: false
     }
   }
 
@@ -133,7 +133,7 @@ class NamespaceDetailsPage extends React.Component {
     if (result.value) {
       const result = await patchNamespace(namespaceId, newNamespace);
 
-      if (result.status === 200) {
+      if (result.ok) {
         successToast('Changed committed successfully');
         await this.props.getNamespaceFromRegistry(this.props.params.prefix);
         await this.props.getResourcesFromRegistry(this.props.namespaceList[0]);
@@ -204,6 +204,8 @@ class NamespaceDetailsPage extends React.Component {
     if (result.value) {
       const result = await reactivateNamespace(namespaceId);
 
+      document.querySelector("#deactivationModal button.close")?.click();
+
       if (result.status === 200) {
         successToast('Namespace reactivation successful');
         await this.props.getNamespaceFromRegistry(this.props.params.prefix);
@@ -242,6 +244,9 @@ class NamespaceDetailsPage extends React.Component {
     this.setState({editNamespace: true});
   };
 
+  dateFormatter = Intl.DateTimeFormat("en-GB");
+  dateFormat = (dateStr) => this.dateFormatter.format(new Date(dateStr))
+  onlyDateFromIsoStr = (dateStr) => dateStr.substring(0,10)
 
   render() {
     const {
@@ -280,7 +285,7 @@ class NamespaceDetailsPage extends React.Component {
           extraTitle={namespace.name}
         />
 
-        {namespace.deprecated && <DeprecationBanner namespace={namespace}/>}
+        {namespace.deprecated && <NamespaceDeprecationNotice namespace={namespace} />}
 
         {editNamespace ? (
           <div className="row mb-1">
@@ -434,6 +439,134 @@ class NamespaceDetailsPage extends React.Component {
             </table>
           </div>
         </div>
+
+        {namespace.deprecated && ( <>
+        <div className="row">
+          <div className="col">
+            <h2><i className="icon icon-common icon-trash"/> Deactivation information</h2>
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <div className="col overflow-y-scroll">
+            <table className="table table-sm table-striped table-borderless">
+              <tbody>
+                <tr>
+                  <td className="w-35">Date of deactivation</td>
+                  <td>{this.dateFormat(namespace.deprecationDate)}</td>
+                </tr>
+                <tr>
+                  <td>
+                    Approximated expiration date
+                    <span className="ml-1" title="Approximation of when this collection went offline">
+                      <i className="icon icon-common icon-question-circle"></i>
+                    </span>
+                  </td>
+                  <td>
+                    {editNamespace ? (
+                      <RoleConditional
+                        requiredRoles={['editNamespace']}
+                        fallbackComponent={namespace.deprecationOfflineDate}
+                      >
+                        <ReversibleField fieldName="deprecationOfflineDate"
+                                         defaultValue={this.onlyDateFromIsoStr(namespace.deprecationOfflineDate)}
+                                         handleChangeField={handleChangeField}>
+                          <input type="date" />
+                        </ReversibleField>
+                      </RoleConditional>
+                    ) : (
+                      namespace.deprecationOfflineDate ? this.dateFormat(namespace.deprecationOfflineDate) : "Unknown"
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Deactivation statement</td>
+                  <td>
+                    {editNamespace ? (
+                      <RoleConditional
+                        requiredRoles={['editNamespace']}
+                        fallbackComponent={namespace.deprecationStatement}
+                      >
+                        <ReversibleField fieldName="deprecationStatement"
+                                         defaultValue={namespace.deprecationStatement}
+                                         handleChangeField={handleChangeField}>
+                          <input type="text" />
+                        </ReversibleField>
+                      </RoleConditional>
+                    ) : (
+                      namespace.deprecationStatement ? namespace.deprecationStatement : "Not provided"
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Post-mortem data acquisition
+                    <span className="ml-1" title="Instructions on how to currently access data">
+                      <i className="icon icon-common icon-question-circle"></i>
+                    </span>
+                  </td>
+                  <td>
+                    {editNamespace ? (
+                      <RoleConditional
+                        requiredRoles={['editNamespace']}
+                        fallbackComponent={namespace.infoOnPostmortemAccess}
+                      >
+                        <ReversibleField fieldName="infoOnPostmortemAccess"
+                                         defaultValue={namespace.infoOnPostmortemAccess}
+                                         handleChangeField={handleChangeField}>
+                          <input type="text" />
+                        </ReversibleField>
+                      </RoleConditional>
+                    ) : (
+                      namespace.infoOnPostmortemAccess ? namespace.deprecationStatement : "Not available"
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Succeeding namespace
+                    <span className="ml-1" title="Namespace that currently handles data of this namespace">
+                      <i className="icon icon-common icon-question-circle"></i>
+                    </span>
+                  </td>
+                  <td>
+                    {editNamespace ? (
+                      <RoleConditional
+                        requiredRoles={['editNamespace']}
+                        fallbackComponent={namespace.successor}
+                      >
+                        <ReversibleField fieldName="successor"
+                                         defaultValue={namespace.successor}
+                                         handleChangeField={handleChangeField}>
+                          <input type="text" />
+                        </ReversibleField>
+                      </RoleConditional>
+                    ) : (
+                      namespace.successor ? <a href={`/registry/${namespace.successor}`}>{namespace.successor}</a > : "Not available"
+                    )}
+                  </td>
+                </tr>
+                <RoleConditional requiredRoles={['editNamespace']}>
+                  <tr>
+                    <td> Should render deactivation landing page </td>
+                    <td>
+                      { editNamespace ? (
+                        <ReversibleField fieldName="renderDeprecatedLanding"
+                                         defaultValue={namespace.renderDeprecatedLanding}
+                                         handleChangeField={handleChangeField}>
+                          <input type="checkbox" className="form-check-input" />
+                        </ReversibleField>
+                      ) : (
+                        namespace.renderDeprecatedLanding ? "Yes" : "No"
+                      ) }
+                    </td>
+                  </tr>
+                </RoleConditional>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        </>)}
 
         <div className="row">
           <div className="col">
