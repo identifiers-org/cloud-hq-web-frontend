@@ -246,7 +246,7 @@ class NamespaceDetailsPage extends React.Component {
 
   dateFormatter = Intl.DateTimeFormat("en-GB");
   dateFormat = (dateStr) => this.dateFormatter.format(new Date(dateStr))
-  onlyDateFromIsoStr = (dateStr) => dateStr.substring(0,10)
+  onlyDateFromIsoStr = (dateStr) => dateStr ? dateStr.substring(0,10) : dateStr
 
   render() {
     const {
@@ -500,7 +500,7 @@ class NamespaceDetailsPage extends React.Component {
                 </tr>
                 <tr>
                   <td>
-                    Post-mortem data acquisition
+                    Data acquisition
                     <span className="ml-1" title="Instructions on how to currently access data">
                       <i className="icon icon-common icon-question-circle"></i>
                     </span>
@@ -548,7 +548,7 @@ class NamespaceDetailsPage extends React.Component {
                 </tr>
                 <RoleConditional requiredRoles={['editNamespace']}>
                   <tr>
-                    <td> Should render deactivation landing page </td>
+                    <td> Deactivation landing page </td>
                     <td>
                       { editNamespace ? (
                         <ReversibleField fieldName="renderDeprecatedLanding"

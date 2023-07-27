@@ -202,7 +202,9 @@ class ResourceItem extends React.Component {
     this.setState({reactivateResource: true});
   };
 
-
+  dateFormatter = Intl.DateTimeFormat("en-GB");
+  dateFormat = (dateStr) => this.dateFormatter.format(new Date(dateStr))
+  onlyDateFromIsoStr = (dateStr) => dateStr ? dateStr.substring(0,10) : dateStr
 
   render() {
     const {
@@ -297,7 +299,7 @@ class ResourceItem extends React.Component {
               <tbody>
                 <tr>
                   <td
-                    rowSpan="8"
+                    rowSpan="12"
                     className={`w-20 align-middle ${resource.deprecated ? 'bg-danger text-white' : resource.official ? 'bg-warning' : 'bg-primary text-white'}`}
                   >
                     {resource.deprecated && (
@@ -328,7 +330,7 @@ class ResourceItem extends React.Component {
                     <p className="text-center m-0">{resource.mirId}</p>
                     <p className="font-weight-bold text-center m-0">{resource.official ? 'Primary' : ''}</p>
                   </td>
-                  <td className="w-15 px-3">Name</td>
+                  <td className="w-20 px-3">Name</td>
                   <td className="resourceitem-table__wide">
                     {editResource ? (
                       <RoleConditional
@@ -345,7 +347,7 @@ class ResourceItem extends React.Component {
                   </td>
                 </tr>
                 <tr>
-                  <td className="w-15 px-3">Description</td>
+                  <td className="w-20 px-3">Description</td>
                   <td className="resourceitem-table__wide">
                     {editResource ? (
                       <RoleConditional
@@ -361,6 +363,66 @@ class ResourceItem extends React.Component {
                     )}
                   </td>
                 </tr>
+                {resource.deprecated && ( <>
+                  <tr>
+                    <td className="w-20 px-3">Date of deactivation</td>
+                    <td>{this.dateFormat(resource.deprecationDate)}</td>
+                  </tr>
+                  <tr>
+                    <td className="w-20 px-3">Approximated expiration date</td>
+                    <td>
+                      {editResource ? (
+                        <RoleConditional
+                          requiredRoles={['editResource']}
+                          fallbackComponent={resource.deprecationOfflineDate}
+                        >
+                          <ReversibleField fieldName="deprecationOfflineDate"
+                                           defaultValue={this.onlyDateFromIsoStr(resource.deprecationOfflineDate)}
+                                           handleChangeField={handleChangeField}>
+                            <input type="date" />
+                          </ReversibleField>
+                        </RoleConditional>
+                      ) : (
+                        resource.deprecationOfflineDate ? this.dateFormat(resource.deprecationOfflineDate) : "Unknown"
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="w-20 px-3">Deactivation statement</td>
+                    <td>
+                      {editResource ? (
+                        <RoleConditional
+                          requiredRoles={['editResource']}
+                          fallbackComponent={resource.deprecationStatement}
+                        >
+                          <ReversibleField fieldName="deprecationStatement"
+                                           defaultValue={resource.deprecationStatement}
+                                           handleChangeField={handleChangeField}>
+                            <input type="text" />
+                          </ReversibleField>
+                        </RoleConditional>
+                      ) : (
+                        resource.deprecationStatement || "Not provided"
+                      )}
+                    </td>
+                  </tr>
+                  <RoleConditional requiredRoles={['editResource']}>
+                    <tr>
+                      <td className="w-20 px-3">Deactivation landing page</td>
+                      <td>
+                        {editResource ? (
+                          <ReversibleField fieldName="renderDeprecatedLanding"
+                                           defaultValue={resource.renderDeprecatedLanding}
+                                           handleChangeField={handleChangeField}>
+                            <input type="checkbox" className="form-check-input" />
+                          </ReversibleField>
+                        ) : (
+                          resource.renderDeprecatedLanding ? "Yes" : "No"
+                        )}
+                      </td>
+                    </tr>
+                  </RoleConditional>
+                </>)}
                 <tr>
                   <td className="px-3">URL Pattern</td>
                   <td>
@@ -369,12 +431,14 @@ class ResourceItem extends React.Component {
                         requiredRoles={['editResource']}
                         fallbackComponent={resource.urlPattern}
                       >
-                        <ReversibleField fieldName="urlPattern" defaultValue={resource.urlPattern} handleChangeField={handleChangeField}>
+                        <ReversibleField fieldName="urlPattern"
+                                         defaultValue={resource.urlPattern}
+                                         handleChangeField={handleChangeField}>
                           <input type="text" />
                         </ReversibleField>
                       </RoleConditional>
                     ) : (
-                      resource.urlPattern
+                      <a href={resource.urlPattern.replace("{$id}", resource.sampleId)}> {resource.urlPattern} </a>
                     )}
                   </td>
                 </tr>
@@ -485,8 +549,10 @@ class ResourceItem extends React.Component {
                   </td>
                 </tr>
                 <tr>
-                  <td className="w-15 px-3">Institution ROR ID</td>
-                  <td className="resourceitem-table__wide">{resource.institution.rorId || ''}</td>
+                  <td className="w-20 px-3">Institution ROR ID</td>
+                  <td className="resourceitem-table__wide">
+                    {resource.institution.rorId || "Unknown"}
+                  </td>
                 </tr>
               </tbody>
             </table>
