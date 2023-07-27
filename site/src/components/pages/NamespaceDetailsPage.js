@@ -418,16 +418,16 @@ class NamespaceDetailsPage extends React.Component {
                   <td>Prefix embedded in LUI</td>
                   <td>
                     {editNamespace ? (
-                        <RoleConditional
-                            requiredRoles={['editNamespace']}
-                            fallbackComponent={namespace.namespaceEmbeddedInLui}
-                        >
-                          <ReversibleField fieldName="namespaceEmbeddedInLui" defaultValue={namespace.namespaceEmbeddedInLui} handleChangeField={handleChangeField}>
-                            <input type="checkbox" className="form-check-input"/>
-                          </ReversibleField>
-                        </RoleConditional>
+                      <RoleConditional
+                        requiredRoles={['editNamespace']}
+                        fallbackComponent={namespace.namespaceEmbeddedInLui}
+                      >
+                        <ReversibleField fieldName="namespaceEmbeddedInLui" defaultValue={namespace.namespaceEmbeddedInLui} handleChangeField={handleChangeField}>
+                          <input type="checkbox" className="form-check-input"/>
+                        </ReversibleField>
+                      </RoleConditional>
                     ) : (
-                        namespace.pattern
+                      namespace.namespaceEmbeddedInLui ? "Yes" : "No"
                     )}
                   </td>
                 </tr>
@@ -588,7 +588,7 @@ class NamespaceDetailsPage extends React.Component {
                 </tr>
                 <tr>
                   <td>Registry URI</td>
-                  <td>{config.baseUrl}registry/{namespace.prefix}</td>
+                  <td><a href={config.baseUrl + "registry/" + namespace.prefix} target="_blank">{config.baseUrl}registry/{namespace.prefix}</a></td>
                 </tr>
                 <tr>
                   <td>Sample URL</td>

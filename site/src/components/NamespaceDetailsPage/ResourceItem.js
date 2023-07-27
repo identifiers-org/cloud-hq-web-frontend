@@ -299,7 +299,7 @@ class ResourceItem extends React.Component {
               <tbody>
                 <tr>
                   <td
-                    rowSpan="12"
+                    rowSpan="15"
                     className={`w-20 align-middle ${resource.deprecated ? 'bg-danger text-white' : resource.official ? 'bg-warning' : 'bg-primary text-white'}`}
                   >
                     {resource.deprecated && (
@@ -438,7 +438,7 @@ class ResourceItem extends React.Component {
                         </ReversibleField>
                       </RoleConditional>
                     ) : (
-                      <a href={resource.urlPattern.replace("{$id}", resource.sampleId)}> {resource.urlPattern} </a>
+                      resource.urlPattern
                     )}
                   </td>
                 </tr>
@@ -455,10 +455,80 @@ class ResourceItem extends React.Component {
                         </ReversibleField>
                       </RoleConditional>
                     ) : (
-                      resource.resourceHomeUrl
+                      <a target='_blank' href={resource.resourceHomeUrl}>{resource.resourceHomeUrl}</a>
                     )}
                   </td>
                 </tr>
+                <tr>
+                  <td className="px-3">Has protected URLs</td>
+                  <td>
+                    {editResource ? (
+                      <RoleConditional
+                        requiredRoles={['editResource']}
+                        fallbackComponent={resource.protectedUrls}
+                      >
+                        <ReversibleField fieldName="protectedUrls" defaultValue={resource.protectedUrls} handleChangeField={handleChangeField}>
+                          <input type="checkbox" className="form-check-input" />
+                        </ReversibleField>
+                      </RoleConditional>
+                    ) : (
+                      resource.protectedUrls ? "Yes" : "No"
+                    )}
+                  </td>
+                </tr>
+                {resource.protectedUrls && <>
+                  <tr>
+                    <td className="px-3">Authorization help URL</td>
+                    <td>
+                      {editResource ? (
+                        <RoleConditional
+                          requiredRoles={['editResource']}
+                          fallbackComponent={resource.authHelpUrl}
+                        >
+                          <ReversibleField fieldName="authHelpUrl" defaultValue={resource.authHelpUrl} handleChangeField={handleChangeField}>
+                            <input type="text" />
+                          </ReversibleField>
+                        </RoleConditional>
+                      ) : (
+                        <a href={resource.authHelpUrl} target='_blank'>{resource.authHelpUrl}</a>
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-3">Authorization description</td>
+                    <td>
+                      {editResource ? (
+                        <RoleConditional
+                          requiredRoles={['editResource']}
+                          fallbackComponent={resource.authHelpDescription}
+                        >
+                          <ReversibleField fieldName="authHelpDescription" defaultValue={resource.authHelpDescription} handleChangeField={handleChangeField}>
+                            <textarea rows="5" />
+                          </ReversibleField>
+                        </RoleConditional>
+                      ) : (
+                        resource.authHelpDescription
+                      )}
+                    </td>
+                  </tr>
+                  <RoleConditional
+                    requiredRoles={['editResource']}
+                    fallbackComponent={resource.renderProtectedLanding}
+                  >
+                    <tr>
+                      <td className="px-3">Render protected landing</td>
+                      <td>
+                        {editResource ? (
+                            <ReversibleField fieldName="renderProtectedLanding" defaultValue={resource.renderProtectedLanding} handleChangeField={handleChangeField}>
+                              <input type="checkbox" className="form-check-input" />
+                            </ReversibleField>
+                        ) : (
+                          resource.renderProtectedLanding ? "Yes" : "No"
+                        )}
+                      </td>
+                    </tr>
+                  </RoleConditional>
+                </>}
                 <tr>
                   <td className="px-3">Location</td>
                   <td>
@@ -504,7 +574,7 @@ class ResourceItem extends React.Component {
                         </ReversibleField>
                       </RoleConditional>
                     ) : (
-                      resource.sampleId
+                      <a href={resource.urlPattern.replace("{$id}", resource.sampleId)}> {resource.sampleId} </a>
                     )}
                   </td>
                 </tr>
@@ -551,7 +621,7 @@ class ResourceItem extends React.Component {
                 <tr>
                   <td className="w-20 px-3">Institution ROR ID</td>
                   <td className="resourceitem-table__wide">
-                    {resource.institution.rorId || "Unknown"}
+                    {resource.institution.rorId ? <a target="_blank" href={resource.institution.rorId}> {resource.institution.rorId} </a> : "Unknown"}
                   </td>
                 </tr>
               </tbody>

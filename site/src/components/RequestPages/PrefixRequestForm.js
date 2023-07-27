@@ -292,6 +292,19 @@ const PrefixRequestForm = (props) => {
           />
 
           <RegistrationRequestField
+            id="providerLocation"
+            description="The location from which the provider is offering its services (main location in case of multiple ones)."
+            disabled={institutionIsProvider}
+            label="Location"
+            optionlabelfield="countryName"
+            optionsfield="locations"
+            options={props.locationList}
+            type="select"
+            errors={errors}
+            touched={touched}
+          />
+
+          <RegistrationRequestField
             id="providerCode"
             description="This is a unique identifier for the provider within the namespace, for forced resolution requests. No
                         spaces or punctuation, only lowercase alphanumerical characters, underscores and dots."
@@ -314,17 +327,37 @@ const PrefixRequestForm = (props) => {
           />
 
           <RegistrationRequestField
-            id="providerLocation"
-            description="The location from which the provider is offering its services (main location in case of multiple ones)."
-            disabled={institutionIsProvider}
-            label="Location"
-            optionlabelfield="countryName"
-            optionsfield="locations"
-            options={props.locationList}
-            type="select"
+            id="protectedUrls"
+            description="Do links require users to authenticate to access information?"
+            label="Are links protected?"
+            type="checkbox"
             errors={errors}
             touched={touched}
           />
+
+          {values.protectedUrls && <>
+            <RegistrationRequestField
+              id="authHelpDescription"
+              description="A short text describing the need for authentication and how to authenticate.
+                           This should be a little paragraph to give some information to users.
+                           The URL bellow should be where users find further details."
+              label="Authentication description"
+              type="textarea"
+              disabled={!values.protectedUrls}
+              errors={errors}
+              touched={touched}
+            />
+
+            <RegistrationRequestField
+              id="authHelpUrl"
+              description="URL for users to get details on how to authenticate to access resource"
+              label="Authentication details URL"
+              type="text"
+              disabled={!values.protectedUrls}
+              errors={errors}
+              touched={touched}
+            />
+          </>}
         </div>
       </div>
 

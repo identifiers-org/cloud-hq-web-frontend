@@ -1,8 +1,8 @@
-import {addMethod, object, string, ref, Schema} from 'yup';
+import { addMethod, object, string, ref, Schema, bool } from 'yup';
 import validators from "../../utils/validators";
 
 addMethod(Schema, 'validatePrefixRequestWithRegistryEndpoint', function() {
-  return this.test('validatePrefixRequestWithRegistryEndpoint', "Rejected by endpoint",
+  return this.test('validatePrefixRequestWithRegistryEndpoint', "Rejected by endpoint - contact support via feedback button",
     async function(value, textContext) {
       if (value) {
         let attributeToValidate, otherValues;
@@ -84,6 +84,17 @@ const PrefixRegistrationRequestSchema = object({
     .matches(/^http.+\{\$id\}/,
       "Pattern must be a http(s) URL that contains the {$id} placeholder")
     .validatePrefixRequestWithRegistryEndpoint(),
+  protectedUrls: bool().label("Has protected URLs").default(false),
+  authHelpUrl: string().label("Authentication details URL").trim().url()
+    .when("protectedUrls", { is: true,
+      then: schema => schema.required().validatePrefixRequestWithRegistryEndpoint(),
+      otherwise: schema => schema.transform(() => null) // TODO - check why this transform doesn't work with formik
+    }),
+  authHelpDescription: string().label("Authentication description").trim()
+    .when("protectedUrls", { is: true,
+      then: schema => schema.required().min(50).validatePrefixRequestWithRegistryEndpoint(),
+      otherwise: schema => schema.transform(() => null) // TODO - check why this transform doesn't work with formik
+    }),
 
   requester: object({
     email: ref('requester.email'),
@@ -115,6 +126,9 @@ export const PrefixRequestInitialValues = {
   providerCode: "",
   providerLocation: "",
   providerUrlPattern: "",
+  protectedUrls: false,
+  authHelpUrl: "",
+  authHelpDescription: "",
   requester: {
     email: "",
     name: ""
