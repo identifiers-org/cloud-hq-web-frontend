@@ -32,7 +32,7 @@ class HomePage extends React.Component {
   // Takes user to search if there are no prefixes matching that exact query in the namespace list, otherwise
   // will redirect to the matching namespace page.
   handleSearchAction = (query) => {
-    const { namespaceList } = this.props;
+    const { namespaceList, navigate } = this.props;
 
     const exactMatch = namespaceList.find(namespace => namespace.prefix === query);
     const redirectUrl = exactMatch ? `/registry/${query}` : `/registry?query=${query}`;

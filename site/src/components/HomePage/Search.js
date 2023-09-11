@@ -61,7 +61,7 @@ class Search extends React.Component {
       namespaceList: this.props.namespaceList.sort((a, b) => {
         if (a.prefix.startsWith(prefixEffectiveValue) && !b.prefix.startsWith(prefixEffectiveValue)) {
           return -1;
-        };
+        }
 
         if (!a.prefix.startsWith(prefixEffectiveValue) && b.prefix.startsWith(prefixEffectiveValue)) {
           return 1;
@@ -105,6 +105,7 @@ class Search extends React.Component {
   handleKeyDown = (e) => {
     const {
       handleSuggestionClick,
+      props: { handleSearchAction },
       state: { namespaceList, activeSuggestion, query }
     } = this;
 
@@ -112,10 +113,11 @@ class Search extends React.Component {
     case 13: {  // Enter key
       e.preventDefault();   // Do not send form.
 
-      if (activeSuggestion === -1) {
-        handleSuggestionClick(query);
-      } else {
+      if (activeSuggestion !== -1) {
         handleSuggestionClick(namespaceList[activeSuggestion].prefix);
+        break;
+      } else {
+        handleSearchAction(query)
         break;
       }
     }

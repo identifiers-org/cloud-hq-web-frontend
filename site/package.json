@@ -1,7 +1,7 @@
 {
   "name": "identifiers-org-cloud-hq-web-frontend",
   "browserslist": "> 0.5%, last 2 versions, not dead",
-  "version": "1.8.0",
+  "version": "1.8.2",
   "description": "Identifiers.org HQ web frontend written in js",
   "scripts": {
     "start": "NODE_ENV=development parcel serve src/index.html --port 8182",

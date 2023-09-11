@@ -50,6 +50,12 @@ const PrefixRegistrationSessionRequestDetails = ({ data }) => (
             <tr><td className="w-25 pl-2 font-weight-bold">Home URL</td><td className="w-75 text-block">{data.providerHomeUrl}</td></tr>
             <tr><td className="w-25 pl-2 font-weight-bold">Provider code</td><td className="w-75 text-block">{data.providerCode}</td></tr>
             <tr><td className="w-25 pl-2 font-weight-bold">URL Pattern</td><td className="w-75 text-block">{data.providerUrlPattern}</td></tr>
+            <tr><td className="w-25 pl-2 font-weight-bold">Has protected URLs?</td><td className="w-75 text-block">{data.protectedUrls ? "Yes" : "No"}</td></tr>
+            { data.protectedUrls && <>
+              <tr><td className="w-25 pl-2 font-weight-bold">Render protected landing</td><td className="w-75 text-block">{data.renderProtectedLanding ? "Yes" : "No"}</td></tr>
+              <tr><td className="w-25 pl-2 font-weight-bold">Auth help</td><td className="w-75 text-block small">{data.authHelpDescription || ""}</td></tr>
+              <tr><td className="w-25 pl-2 font-weight-bold">Auth help URL</td><td className="w-75 text-block">{data.authHelpUrl || ""}</td></tr>
+            </>}
             <tr><td className="w-25 pl-2 font-weight-bold">Sample Id</td><td className="w-75 text-block">{data.sampleId}</td></tr>
             <tr><td className="w-25 pl-2 font-weight-bold">Location</td><td className="w-75 text-block">{data.providerLocation}</td></tr>
           </tbody>

@@ -263,7 +263,7 @@ class PrefixRegistrationSessionAmendForm extends React.Component {
                   <td className="w-25 align-middle pl-2 font-weight-bold">ROR Id</td>
                   <td className="w-75">
                     <ReversibleField
-                      fieldName="rorId"
+                      fieldName="institutionRorId"
                       defaultValue={prefixRegistrationRequest.institutionRorId}
                       handleChangeField={handleChangeField}
                       ref={this.institutionRorIdRef}
@@ -387,6 +387,38 @@ class PrefixRegistrationSessionAmendForm extends React.Component {
                   <td className="w-25 align-middle pl-2 font-weight-bold">URL Pattern</td>
                   <td className="w-75">
                     <ReversibleField fieldName="providerUrlPattern" defaultValue={prefixRegistrationRequest.providerUrlPattern} handleChangeField={handleChangeField}>
+                      <input type="text" />
+                    </ReversibleField>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="w-25 align-middle pl-2 font-weight-bold">has Protected URLs?</td>
+                  <td className="w-75">
+                    <ReversibleField fieldName="protectedUrls" defaultValue={prefixRegistrationRequest.protectedUrls} handleChangeField={handleChangeField}>
+                      <input type="checkbox" />
+                    </ReversibleField>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="w-25 align-middle pl-2 font-weight-bold">Render protected landing?</td>
+                  <td className="w-75">
+                    <ReversibleField fieldName="renderProtectedLanding" defaultValue={prefixRegistrationRequest.renderProtectedLanding} handleChangeField={handleChangeField}>
+                      <input type="checkbox" />
+                    </ReversibleField>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="w-25 align-middle pl-2 font-weight-bold">Auth description</td>
+                  <td className="w-75">
+                    <ReversibleField fieldName="authHelpDescription" defaultValue={prefixRegistrationRequest.authHelpDescription} handleChangeField={handleChangeField}>
+                      <input type="text" />
+                    </ReversibleField>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="w-25 align-middle pl-2 font-weight-bold">Auth URL</td>
+                  <td className="w-75">
+                    <ReversibleField fieldName="authHelpUrl" defaultValue={prefixRegistrationRequest.authHelpUrl} handleChangeField={handleChangeField}>
                       <input type="text" />
                     </ReversibleField>
                   </td>
