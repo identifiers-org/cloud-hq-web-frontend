@@ -299,7 +299,7 @@ class ResourceItem extends React.Component {
               <tbody>
                 <tr>
                   <td
-                    rowSpan="15"
+                    rowSpan="16"
                     className={`w-20 align-middle ${resource.deprecated ? 'bg-danger text-white' : resource.official ? 'bg-warning' : 'bg-primary text-white'}`}
                   >
                     {resource.deprecated && (
