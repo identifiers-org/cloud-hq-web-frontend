@@ -83,12 +83,8 @@ class HomePage extends React.Component {
           <div className={`row justify-content-center mt-2 ${searchBarPadding}`}>
             <div className="col col-lg-7 col-xl-12">
               <Search
-                query={query}
-                button={true}
                 buttonCaption={<span><i className="icon icon-common icon-search mr-1" /> Search</span>}
                 placeholderCaption="Enter a namespace to search the registry"
-                handleSearchAction={handleSearchAction}
-                handleSuggestionAction={handleSuggestionAction}
               />
             </div>
           </div>

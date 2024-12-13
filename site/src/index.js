@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 
@@ -81,7 +81,7 @@ import "bootstrap/dist/js/bootstrap.min"
   root.render(
     <Provider store={store}>
       <MatomoProvider value={instance}>
-        <AppRouter />
+        <StrictMode> <AppRouter /> </StrictMode>
       </MatomoProvider>,
     </Provider>
   );

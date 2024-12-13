@@ -31,7 +31,7 @@ export const config = {
 
   showBetaBanner: false,
 
-  suggestionListSize: 10,
+  suggestionQuerySize: 10,
 
   baseUrl: `${window.location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}/`,
 
@@ -46,5 +46,8 @@ export const config = {
   // Enable institution dropdown selection in registration request.
   enableRegistrationRequestInstitutionDropdownSelection: false,
 
-  enableAuthFeatures: true
+  enableAuthFeatures: true,
+
+  ebiSearchDomainEndpoint: 'https://www.ebi.ac.uk/ebisearch/ws/rest/identifiers_registry',
+  ebiSearchResponseSize: 100,
 };
