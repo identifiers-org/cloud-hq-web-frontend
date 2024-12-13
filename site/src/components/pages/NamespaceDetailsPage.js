@@ -621,30 +621,30 @@ class NamespaceDetailsPage extends React.Component {
         </div>
 
         {/* Page first loads without statistics */}
-        <div className="row">
-          <div className="col">
-            <h2><i className="icon icon-common icon-search-document" /> Usage for last month </h2>
-          </div>
-        </div>
-        { (namespace.stats === undefined) ? <Spinner noText noCenter /> :
-            (namespace.stats === null ?  <div className="row mb-3"> Statistics deactivated </div> : <>
-              <div className="row mb-3">
-                <div className="col overflow-y-scroll">
-                  <table className="table table-sm table-striped table-borderless">
-                    <tbody>
-                      <tr>
-                        <td className="w-35">Number of visits</td>
-                        <td> {namespace.stats.nb_visits} </td>
-                      </tr>
-                      <tr>
-                        <td className="w-35">Number of unique visitors</td>
-                        <td> {namespace.stats.nb_uniq_visitors} </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-        </>) }
+        {/*<div className="row">*/}
+        {/*  <div className="col">*/}
+        {/*    <h2><i className="icon icon-common icon-search-document" /> Usage for last month </h2>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
+        {/*{ (namespace.stats === undefined) ? <Spinner noText noCenter /> :*/}
+        {/*    (namespace.stats === null ?  <div className="row mb-3"> Statistics deactivated </div> : <>*/}
+        {/*      <div className="row mb-3">*/}
+        {/*        <div className="col overflow-y-scroll">*/}
+        {/*          <table className="table table-sm table-striped table-borderless">*/}
+        {/*            <tbody>*/}
+        {/*              <tr>*/}
+        {/*                <td className="w-35">Number of visits</td>*/}
+        {/*                <td> {namespace.stats.nb_visits} </td>*/}
+        {/*              </tr>*/}
+        {/*              <tr>*/}
+        {/*                <td className="w-35">Number of unique visitors</td>*/}
+        {/*                <td> {namespace.stats.nb_uniq_visitors} </td>*/}
+        {/*              </tr>*/}
+        {/*            </tbody>*/}
+        {/*          </table>*/}
+        {/*        </div>*/}
+        {/*      </div>*/}
+        {/*</>) }*/}
 
         <div className="row">
           <div className="col">

@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { faDatabase } from '@fortawesome/free-solid-svg-icons';
-
 import NamespaceList from '../BrowseRegistryPage/NamespaceList';
 import PageTitle from '../common/PageTitle';
 
