@@ -84,31 +84,35 @@ class Search extends React.Component {
     } = this;
 
     return (
-      <form onSubmit={this.handleSubmit} role='search'>
-        <div className="form-group search-form-group">
-          <div className="input-group inline-search-input-group">
-            <input
-              role='searchbox'
-              className='form-control search-input'
-              onChange={this.handleChange}
-              onKeyDown={this.handleKeyDown}
-              placeholder={placeholderCaption}
-              ref={this.search}
-              spellCheck={false}
-              value={query}
-            />
-            <div className="input-group-append">
-              <button className="btn btn-primary">
-                {buttonCaption}
-              </button>
+        <form onSubmit={this.handleSubmit} role='search'>
+          <div className="form-group search-form-group">
+            <div className="input-group inline-search-input-group">
+              <input
+                  role='searchbox'
+                  className='form-control search-input'
+                  onChange={this.handleChange}
+                  onKeyDown={this.handleKeyDown}
+                  placeholder={placeholderCaption}
+                  ref={this.search}
+                  spellCheck={false}
+                  value={query}
+              />
+              <div className="input-group-append">
+                <button className="btn btn-primary">
+                  {buttonCaption}
+                </button>
+              </div>
             </div>
+            {query && <SearchSuggestions query={query} ref={this.suggestionListRef}/>}
+            <a className="text-muted text-sm ml-1" href="https://www.ebi.ac.uk/ebisearch">
+              powered by EBI Search
+            </a>
           </div>
-          { query && <SearchSuggestions query={query} ref={this.suggestionListRef} /> }
-        </div>
-      </form>
+        </form>
     )
   }
 }
+
 Search.propTypes = {
   buttonCaption: PropsTypes.oneOfType([PropsTypes.element, PropsTypes.string]).isRequired,
   placeholderCaption: PropsTypes.string.isRequired,

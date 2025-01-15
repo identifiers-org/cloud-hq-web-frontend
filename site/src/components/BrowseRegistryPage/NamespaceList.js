@@ -4,6 +4,7 @@ import Paginator from '../common/Paginator';
 import EbiSearchService from "../common/EbiSearchService";
 import PropTypes from "prop-types";
 import { useSearchParams } from 'react-router-dom';
+import Spinner from "../common/Spinner";
 
 
 class NamespaceList extends React.Component {
@@ -14,6 +15,7 @@ class NamespaceList extends React.Component {
       query: props.query,
       debounceSearch: undefined,
       namespaceList: [],
+      loading: false,
       namespaceListParams: {
         page: 0, size: 20,
         totalPages: 0,
@@ -29,27 +31,26 @@ class NamespaceList extends React.Component {
     const { page, size } = this.state.namespaceListParams;
     const query = this.searchBarRef.current.value || '*:*';
 
-    const [hitCount, namespaces] = (
-      await EbiSearchService.queryEbiSearchForRelevantNamespacesWithHitCount(
+    this.setState({
+      loading: true
+    });
+
+    EbiSearchService.queryEbiSearchForRelevantNamespacesWithHitCount(
         query + querySuffix,{
-          fields: 'name,prefix',
+          fields: 'name,prefix,description',
           start: page*size, size
         }
-      )
-    );
-
-    console.log(query, {
-      page, size,
-      totalPages: Math.ceil(hitCount/size),
-      totalElements: hitCount
-    });
-    this.setState({
-      namespaceList: namespaces,
-      namespaceListParams: {
-        page, size,
-        totalPages: Math.ceil(hitCount/size),
-        totalElements: hitCount
-      }
+    ).then(([hitCount, namespaces]) => {
+      this.setState({
+        namespaceList: namespaces,
+        namespaceListParams: {
+          page, size,
+          totalPages: Math.ceil(hitCount/size),
+          totalElements: hitCount
+        }
+      });
+    }).finally(() => {
+      this.setState({loading: false})
     });
   };
 
@@ -112,7 +113,9 @@ class NamespaceList extends React.Component {
         page, size,
         totalElements, totalPages
       },
+      loading
     } = this.state;
+
     const prefixStart = null;
 
     // const alphabetSearch = Object.freeze('#ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''));
@@ -164,34 +167,35 @@ class NamespaceList extends React.Component {
           <div className="col col-12 col-xl-4 mt-2 p-1">
             <div className="input-group input-group-sm mb-3">
               <div className="input-group-prepend">
-                <span className="input-group-text" id="registry-search">Search</span>
+                <span className="input-group-text"
+                      id="registry-search"
+                      title="powered by EBI Search">
+                  Search
+                </span>
               </div>
               <input
-                type="text"
-                className="form-control"
-                placeholder="Input a search query"
-                role='searchbox'
-                aria-label="Search"
-                aria-describedby="registry-search"
-                onChange={this.handleSearchChange}
-                value={undefined}
-                ref={this.searchBarRef}
+                  type="text"
+                  className="form-control"
+                  placeholder="Input a search query"
+                  role='searchbox'
+                  aria-label="Search"
+                  aria-describedby="registry-search"
+                  onChange={this.handleSearchChange}
+                  value={undefined}
+                  ref={this.searchBarRef}
               />
             </div>
           </div>
         </div>
 
-        {/* NAMESPACE LIST */}
-        <div>
-          {
-            namespaceList.length === 0 ? (
-              <p className="text-center my-5">No items</p>
-            ) : (
+        { loading ? <Spinner /> : (
+          <div>
+            { namespaceList.length === 0 ? <p className="text-center my-5">No items</p> :
               <div className="card mb-3 overflow-y-scroll">
                 <table className="table table-sm table-striped table-hover table-borderless table-fixed">
                   <thead className="thead-light thead-rounded">
                     <tr>
-                      <th className={`${isSmallScreen ? 'small-wide' : 'med'}`}>
+                      <th className={`${isSmallScreen ? 'small-wide' : 'wide'}`}>
                         <i className="icon icon-common icon-list" /> Name
                       </th>
                       <th className={`${isSmallScreen ? 'small-narrow' : 'med'} text-center`}>
@@ -202,32 +206,30 @@ class NamespaceList extends React.Component {
                           <i className="icon icon-common icon-info" /> Description
                         </th>
                       )}
-
                     </tr>
-                    </thead>
-                    <tbody>
+                  </thead>
+                  <tbody>
                     {
                       // Page data.
                       namespaceList.map(namespace =>
-                        <NamespaceItem key={`namespace-${namespace.prefix}`} {...namespace} />
+                          <NamespaceItem key={`namespace-${namespace.prefix}`} {...namespace} />
                       )
                     }
                   </tbody>
                 </table>
               </div>
-            )
-          }
-        </div>
-
+            }
+          </div>
+        )}
         {/* FOOTER */}
         <footer className='d-block d-sm-none'>
           <Paginator
-            navigate={this.handlePageChange}
-            number={page}
-            setSize={this.handleSetSize}
-            size={size}
-            totalPages={totalPages}
-            totalElements={totalElements}
+              navigate={this.handlePageChange}
+              number={page}
+              setSize={this.handleSetSize}
+              size={size}
+              totalPages={totalPages}
+              totalElements={totalElements}
           />
         </footer>
       </>

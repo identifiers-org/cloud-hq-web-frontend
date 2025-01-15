@@ -61,7 +61,7 @@ class NamespaceDetailsPage extends React.Component {
 
     await getNamespaceFromRegistry(prefix);
     await getResourcesFromRegistry(this.props.namespaceList[0]);
-    await getStatisticsFromRegistry(this.props.namespaceList[0]);
+    // await getStatisticsFromRegistry(this.props.namespaceList[0]);
 
     // Prepares model for namespace patching.
     const {resources, _links, ...newNamespace} = this.props.namespaceList[0];

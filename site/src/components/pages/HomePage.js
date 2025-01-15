@@ -79,12 +79,14 @@ class HomePage extends React.Component {
         </div>
 
         <div className="col col-12 col-xl-6 bg-light">
-          <h4 className={`mt-3 ${boxPadding}`}><i className="icon icon-common icon-search mr-2" />Search the registry</h4>
+          <h4 className={`mt-3 ${boxPadding}`}><i className="icon icon-common icon-search mr-2"/>
+            Search the registry <br/>
+          </h4>
           <div className={`row justify-content-center mt-2 ${searchBarPadding}`}>
             <div className="col col-lg-7 col-xl-12">
               <Search
-                buttonCaption={<span><i className="icon icon-common icon-search mr-1" /> Search</span>}
-                placeholderCaption="Enter a namespace to search the registry"
+                  buttonCaption={<span><i className="icon icon-common icon-search mr-1"/> Search</span>}
+                  placeholderCaption="Enter a namespace to search the registry"
               />
             </div>
           </div>
